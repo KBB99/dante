@@ -1,0 +1,319 @@
+You are a helpful assistant. Your goal is to turn code into Open Cypher commands that will be used to create an intelligible graph that is easily digestible. A centralized orchestrator will then use the graph and OpenCypher commands to make sense of the code and figure out how to modify it. Here is the data injected to the current graph, which was created from other files. Please add what is missing to the file based on the new file given by the user.
+
+**From prepare-dataset/webdataset.py**
+// Create Libraries
+CREATE 
+  (azureStorageBlob:Library {name:'azure.storage.blob'}),
+  (io:Library {name:'io'}),
+  (torch:Library {name:'torch'}),
+  (torchaudio:Library {name:'torchaudio'}),
+  (torchUtilsData:Library {name:'torch.utils.data'}),
+  (numpy:Library {name:'numpy'}),
+  (typing:Library {name:'typing'}),
+  (logging:Library {name:'logging'}),
+  (pandas:Library {name:'pandas'})
+
+// Create Class Nodes
+CREATE 
+  (IterableWebDataset:Class {name:'IterableWebDataset'})
+
+// Create Relationships between Libraries and Classes
+CREATE 
+  (azureStorageBlob)-[:USED_IN]->(IterableWebDataset),
+  (io)-[:USED_IN]->(IterableWebDataset),
+  (torch)-[:USED_IN]->(IterableWebDataset),
+  (torchaudio)-[:USED_IN]->(IterableWebDataset),
+  (torchUtilsData)-[:USED_IN]->(IterableWebDataset),
+  (numpy)-[:USED_IN]->(IterableWebDataset),
+  (typing)-[:USED_IN]->(IterableWebDataset),
+  (logging)-[:USED_IN]->(IterableWebDataset),
+  (pandas)-[:USED_IN]->(IterableWebDataset)
+
+// Create Method Nodes for each class
+CREATE 
+  (initIterableWebDataset:Method {name:'__init__'}),
+  (lenIterableWebDataset:Method {name:'__len__'}),
+  (getWaveformFromBlobIterableWebDataset:Method {name:'_get_waveform_from_blob'})
+
+// Create Relationships between Class and its Methods
+CREATE 
+  (IterableWebDataset)-[:HAS_METHOD]->(initIterableWebDataset),
+  (IterableWebDataset)-[:HAS_METHOD]->(lenIterableWebDataset),
+  (IterableWebDataset)-[:HAS_METHOD]->(getWaveformFromBlobIterableWebDataset)
+
+**From prepare-dataset/upload.py**
+// Create Libraries
+CREATE 
+  (azureStorageBlob:Library {name:'azure.storage.blob'}),
+  (azureIdentity:Library {name:'azure.identity'}),
+  (os:Library {name:'os'})
+
+// Create Function Nodes
+CREATE 
+  (azureUploadFilelike:Function {name:'azure_upload_filelike'})
+
+// Create Relationships between Libraries and Function
+CREATE 
+  (azureStorageBlob)-[:USED_IN]->(azureUploadFilelike),
+  (azureIdentity)-[:USED_IN]->(azureUploadFilelike),
+  (os)-[:USED_IN]->(azureUploadFilelike)
+
+**From training/dataset/preprocessed.py**
+// Create Libraries
+CREATE 
+  (azureStorageBlob:Library {name:'azure.storage.blob'}),
+  (io:Library {name:'io'}),
+  (os:Library {name:'os'}),
+  (torch:Library {name:'torch'}),
+  (torchUtilsData:Library {name:'torch.utils.data'}),
+  (typing:Library {name:'typing'}),
+  (logging:Library {name:'logging'}),
+  (pandas:Library {name:'pandas'}),
+  (tqdm:Library {name:'tqdm'})
+
+// Create Class Nodes
+CREATE 
+  (PreProcessedDataset:Class {name:'PreProcessedDataset'})
+
+// Create Relationships between Libraries and Classes
+CREATE 
+  (azureStorageBlob)-[:USED_IN]->(PreProcessedDataset),
+  (io)-[:USED_IN]->(PreProcessedDataset),
+  (os)-[:USED_IN]->(PreProcessedDataset),
+  (torch)-[:USED_IN]->(PreProcessedDataset),
+  (torchUtilsData)-[:USED_IN]->(PreProcessedDataset),
+  (typing)-[:USED_IN]->(PreProcessedDataset),
+  (logging)-[:USED_IN]->(PreProcessedDataset),
+  (pandas)-[:USED_IN]->(PreProcessedDataset),
+  (tqdm)-[:USED_IN]->(PreProcessedDataset)
+
+// Create Method Nodes for each class
+CREATE 
+  (initPreProcessedDataset:Method {name:'__init__'}),
+  (lenPreProcessedDataset:Method {name:'__len__'}),
+  (getItemPreProcessedDataset:Method {name:'__getitem__'})
+
+// Create Relationships between Class and its Methods
+CREATE 
+  (PreProcessedDataset)-[:HAS_METHOD]->(initPreProcessedDataset),
+  (PreProcessedDataset)-[:HAS_METHOD]->(lenPreProcessedDataset),
+  (PreProcessedDataset)-[:HAS_METHOD]->(getItemPreProcessedDataset)
+
+**From dante_qlora.py
+// Create Libraries
+CREATE 
+  (typing:Library {name:'typing'}),
+  (torch:Library {name:'torch'}),
+  (transformers:Library {name:'transformers'}),
+  (os:Library {name:'os'}),
+  (dotenv:Library {name:'dotenv'}),
+  (barktok:Library {name:'models.barktok.modeling_barktok'}),
+  (trainersBase:Library {name:'trainers.base'}),
+  (datasetPreprocessed:Library {name:'dataset.preprocessed'}),
+  (bitsandbytes:Library {name:'bitsandbytes'}),
+  (nn:Library {name:'nn'}),
+  (peft:Library {name:'peft'}),
+  (re:Library {name:'re'}),
+  (torchUtilsData:Library {name:'torch.utils.data'})
+
+// Create Class Nodes
+CREATE 
+  (MyTrainer:Class {name:'MyTrainer'})
+
+// Create Relationships between Libraries and Classes
+CREATE 
+  (typing)-[:USED_IN]->(MyTrainer),
+  (torch)-[:USED_IN]->(MyTrainer),
+  (transformers)-[:USED_IN]->(MyTrainer),
+  (os)-[:USED_IN]->(MyTrainer),
+  (dotenv)-[:USED_IN]->(MyTrainer),
+  (barktok)-[:USED_IN]->(MyTrainer),
+  (trainersBase)-[:USED_IN]->(MyTrainer),
+  (datasetPreprocessed)-[:USED_IN]->(MyTrainer),
+  (bitsandbytes)-[:USED_IN]->(MyTrainer),
+  (nn)-[:USED_IN]->(MyTrainer),
+  (peft)-[:USED_IN]->(MyTrainer),
+  (re)-[:USED_IN]->(MyTrainer),
+  (torchUtilsData)-[:USED_IN]->(MyTrainer)
+
+// Create Method Nodes for each class
+CREATE 
+  (initMyTrainer:Method {name:'__init__'}),
+  (evaluateMyTrainer:Method {name:'evaluate'})
+
+// Create Relationships between Class and its Methods
+CREATE 
+  (MyTrainer)-[:HAS_METHOD]->(initMyTrainer),
+  (MyTrainer)-[:HAS_METHOD]->(evaluateMyTrainer)
+
+**From main.py
+// Create Libraries
+CREATE 
+  (torchMultiprocessing:Library {name:'torch.multiprocessing'}),
+  (torchUtilsData:Library {name:'torch.utils.data'}),
+  (torchaudioFunctional:Library {name:'torchaudio.functional'}),
+  (torchNnFunctional:Library {name:'torch.nn.functional'}),
+  (torchAutocast:Library {name:'torch.autocast'}),
+  (argparse:Library {name:'argparse'}),
+  (tqdm:Library {name:'tqdm'}),
+  (omegaConf:Library {name:'omegaconf'}),
+  (threading:Library {name:'threading'}),
+  (concurrentFutures:Library {name:'concurrent.futures'}),
+  (io:Library {name:'io'}),
+  (time:Library {name:'time'}),
+  (logging:Library {name:'logging'}),
+  (dotenv:Library {name:'dotenv'}),
+  (webdataset:Library {name:'webdataset'}),
+  (upload:Library {name:'upload'}),
+  (utils:Library {name:'utils'}),
+  (tracemalloc:Library {name:'tracemalloc'}),
+  (wandb:Library {name:'wandb'})
+
+// Create Class Nodes
+CREATE 
+  (CPUProcessing:Class {name:'CPUProcessing'}),
+  (GPUProcessing:Class {name:'GPUProcessing'})
+
+// Create Relationships between Libraries and Classes
+CREATE 
+  (torch)-[:USED_IN]->(CPUProcessing),
+  (torch)-[:USED_IN]->(GPUProcessing),
+  (torchMultiprocessing)-[:USED_IN]->(CPUProcessing),
+  (torchUtilsData)-[:USED_IN]->(CPUProcessing),
+  (torchUtilsData)-[:USED_IN]->(GPUProcessing),
+  (torchNnFunctional)-[:USED_IN]->(CPUProcessing),
+  (torchAutocast)-[:USED_IN]->(GPUProcessing),
+  (nn)-[:USED_IN]->(GPUProcessing),
+  (torchaudioFunctional)-[:USED_IN]->(CPUProcessing),
+  (transformers)-[:USED_IN]->(BarkTok),
+  (os)-[:USED_IN]->(CPUProcessing),
+  (os)-[:USED_IN]->(GPUProcessing),
+  (argparse)-[:USED_IN]->(GPUProcessing),
+  (tqdm)-[:USED_IN]->(CPUProcessing),
+  (tqdm)-[:USED_IN]->(GPUProcessing),
+  (omegaConf)-[:USED_IN]->(GPUProcessing),
+  (threading)-[:USED_IN]->(CPUProcessing),
+  (threading)-[:USED_IN]->(GPUProcessing),
+  (concurrentFutures)-[:USED_IN]->(CPUProcessing),
+  (concurrentFutures)-[:USED_IN]->(GPUProcessing),
+  (io)-[:USED_IN]->(GPUProcessing),
+  (time)-[:USED_IN]->(GPUProcessing),
+  (logging)-[:USED_IN]->(CPUProcessing),
+  (logging)-[:USED_IN]->(GPUProcessing),
+  (dotenv)-[:USED_IN]->(GPUProcessing),
+  (webdataset)-[:USED_IN]->(CPUProcessing),
+  (upload)-[:USED_IN]->(GPUProcessing),
+  (utils)-[:USED_IN]->(CPUProcessing),
+  (tracemalloc)-[:USED_IN]->(GPUProcessing),
+  (wandb)-[:USED_IN]->(GPUProcessing),
+  (BarkTok)-[:USED_IN]->(GPUProcessing)
+
+// Create Method Nodes for each class
+CREATE 
+  (initCPUProcessing:Method {name:'__init__'}),
+  (iterCPUProcessing:Method {name:'__iter__'}),
+  (initGPUProcessing:Method {name:'__init__'}),
+  (uploadWorkerGPUProcessing:Method {name:'_upload_worker'}),
+  (forwardGPUProcessing:Method {name:'forward'})
+
+// Create Relationships between Class and its Methods
+CREATE 
+  (CPUProcessing)-[:HAS_METHOD]->(initCPUProcessing),
+  (CPUProcessing)-[:HAS_METHOD]->(iterCPUProcessing),
+  (GPUProcessing)-[:HAS_METHOD]->(initGPUProcessing),
+  (GPUProcessing)-[:HAS_METHOD]->(uploadWorkerGPUProcessing),
+  (GPUProcessing)-[:HAS_METHOD]->(forwardGPUProcessing)
+
+
+** From dataset/models/barktok/modeling_barktok.py
+// Create Libraries
+CREATE 
+  (torch:Library {name:'torch'}),
+  (nn:Library {name:'nn'}),
+  (transformers:Library {name:'transformers'}),
+  (os:Library {name:'os'}),
+  (shutil:Library {name:'shutil'}),
+  (urllib:Library {name:'urllib'}),
+  (huggingface_hub:Library {name:'huggingface_hub'}),
+  (json:Library {name:'json'}),
+  (torchSerialization:Library {name:'torch.serialization'}),
+  (pathlib:Library {name:'pathlib'}),
+  (einops:Library {name:'einops'}),
+  (fairseq:Library {name:'fairseq'}),
+  (torchaudio:Library {name:'torchaudio'}),
+  (audiolm_pytorch:Library {name:'audiolm_pytorch'}),
+  (vocos:Library {name:'vocos'})
+
+// Create Class Nodes
+CREATE 
+  (Data:Class {name:'Data'}),
+  (CustomTokenizer:Class {name:'CustomTokenizer'}),
+  (CustomHubert:Class {name:'CustomHubert'}),
+  (HuBERTManager:Class {name:'HuBERTManager'}),
+  (MyBarkModel:Class {name:'MyBarkModel'}),
+  (BarkTok:Class {name:'BarkTok'})
+
+// Create Relationships between Libraries and Classes
+CREATE 
+  (torch)-[:USED_IN]->(Data),
+  (torch)-[:USED_IN]->(CustomTokenizer),
+  (torch)-[:USED_IN]->(CustomHubert),
+  (torch)-[:USED_IN]->(HuBERTManager),
+  (torch)-[:USED_IN]->(MyBarkModel),
+  (torch)-[:USED_IN]->(BarkTok),
+  (nn)-[:USED_IN]->(CustomTokenizer),
+  (nn)-[:USED_IN]->(CustomHubert),
+  (transformers)-[:USED_IN]->(MyBarkModel),
+  (transformers)-[:USED_IN]->(BarkTok),
+  (os)-[:USED_IN]->(CustomTokenizer),
+  (os)-[:USED_IN]->(HuBERTManager),
+  (shutil)-[:USED_IN]->(HuBERTManager),
+  (urllib)-[:USED_IN]->(HuBERTManager),
+  (huggingface_hub)-[:USED_IN]->(HuBERTManager),
+  (json)-[:USED_IN]->(Data),
+  (json)-[:USED_IN]->(CustomTokenizer),
+  (torchSerialization)-[:USED_IN]->(CustomTokenizer),
+  (pathlib)-[:USED_IN]->(CustomHubert),
+  (einops)-[:USED_IN]->(CustomHubert),
+  (fairseq)-[:USED_IN]->(CustomHubert),
+  (torchaudio)-[:USED_IN]->(CustomHubert),
+  (audiolm_pytorch)-[:USED_IN]->(CustomHubert),
+  (vocos)-[:USED_IN]->(CustomHubert)
+
+// Create Method Nodes for each class
+CREATE 
+  (initData:Method {name:'__init__'}),
+  (loadData:Method {name:'load'}),
+  (saveData:Method {name:'save'}),
+  (initCustomTokenizer:Method {name:'__init__'}),
+  (forwardCustomTokenizer:Method {name:'forward'}),
+  (getTokenCustomTokenizer:Method {name:'get_token'}),
+  (saveCustomTokenizer:Method {name:'save'}),
+  (loadFromCheckpointCustomTokenizer:Method {name:'load_from_checkpoint'}),
+  (initCustomHubert:Method {name:'__init__'}),
+  (forwardCustomHubert:Method {name:'forward'}),
+  (makeSureHubertInstalled:Method {name:'make_sure_hubert_installed'}),
+  (makeSureTokenizerInstalled:Method {name:'make_sure_tokenizer_installed'}),
+  (initMyBarkModel:Method {name:'__init__'}),
+  (generateMyBarkModel:Method {name:'generate'}),
+  (initBarkTok:Method {name:'__init__'}),
+  (encodeBarkTok:Method {name:'encode'})
+
+// Create Relationships between Class and its Methods
+CREATE 
+  (Data)-[:HAS_METHOD]->(initData),
+  (Data)-[:HAS_METHOD]->(loadData),
+  (Data)-[:HAS_METHOD]->(saveData),
+  (CustomTokenizer)-[:HAS_METHOD]->(initCustomTokenizer),
+  (CustomTokenizer)-[:HAS_METHOD]->(forwardCustomTokenizer),
+  (CustomTokenizer)-[:HAS_METHOD]->(getTokenCustomTokenizer),
+  (CustomTokenizer)-[:HAS_METHOD]->(saveCustomTokenizer),
+  (CustomTokenizer)-[:HAS_METHOD]->(loadFromCheckpointCustomTokenizer),
+  (CustomHubert)-[:HAS_METHOD]->(initCustomHubert),
+  (CustomHubert)-[:HAS_METHOD]->(forwardCustomHubert),
+  (HuBERTManager)-[:HAS_METHOD]->(makeSureHubertInstalled),
+  (HuBERTManager)-[:HAS_METHOD]->(makeSureTokenizerInstalled),
+  (MyBarkModel)-[:HAS_METHOD]->(initMyBarkModel),
+  (MyBarkModel)-[:HAS_METHOD]->(generateMyBarkModel),
+  (BarkTok)-[:HAS_METHOD]->(initBarkTok),
+  (BarkTok)-[:HAS_METHOD]->(encodeBarkTok)
